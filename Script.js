@@ -1,17 +1,32 @@
-let userName = askForName();
+// let userName = askForName();
 
-if(!userName){
-    while(!userName){
-        alert("You did not write your name, please write your name");
-        userName = askForName();
-    }
+// if(!userName){
+//     while(!userName){
+//         alert("You did not write your name, please write your name");
+//         userName = askForName();
+//     }
 
-}
+// }
 
-alert("You are Welcome, " + userName)
-alert("Enjoy your quiz")
+// alert("You are Welcome, " + userName)
+// alert("Enjoy your quiz")
 
+//first alert page and next page button
+const alertInput = document.getElementById("usernameinput");
+let alertNameInput = "";
 
+const nextPageButton = document.getElementById("tonextpage")
+nextPageButton.addEventListener('click', () => {
+    const modalPage = document.getElementById("modalpagesection")
+    modalPage.style.display = "none";
+    alertNameInput = alertInput.value;
+
+    const quizPage = document.getElementById("appcontainer");
+    quizPage.style.display = "block";
+
+})
+
+//question and answers
 const questions = [
     {
         question: "What is JavaScript?",
@@ -30,7 +45,7 @@ const questions = [
             { text: "JavaScript has no data types", correct: false },
             { text: "None of the above!", correct: false },
             { text: "JavaScript has four primitive data types: string, number, boolean, and array. It does not have complex data types.", correct: false },
-        ] 
+        ]
     },
 
     // {
@@ -215,24 +230,34 @@ const questions = [
     // },
 ]
 
+//all html elements
 const questionElement = document.getElementById("question")
 const answerButtons = document.getElementById("answer-buttons")
 const nextButton = document.getElementById("next-btn")
 
 let currentQuestionIndex = 0;
-let score = 0; 
+let score = 0;
 
-function askForName (){
-   return prompt("What is your Name?");
-}
+// function askForName() {
+//     return prompt("What is your Name?");
+// }
 
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     nextButton.innerHTML = "Next";
+
+    const prevButton = document.getElementById("prev-btn");
+    prevButton.addEventListener("click", goBack);
     showQuestion();
 }
 
+function goBack() {
+    window.history.back();
+}
+
+
+//show question and answers button
 function showQuestion() {
     resetState();
     let currentQuestion = questions[currentQuestionIndex];
@@ -247,10 +272,12 @@ function showQuestion() {
         if (answer.correct) {
             button.dataset.correct = answer.correct;
         }
-        button.addEventListener('click', (event)=> selectTheAnswer(event));
+        button.addEventListener('click', (event) => selectTheAnswer(event));
     });
 }
 
+
+//next buttons
 function resetState() {
     nextButton.style.display = "none";
     while (answerButtons.firstChild) {
@@ -258,6 +285,8 @@ function resetState() {
     }
 }
 
+
+//answre selection
 function selectTheAnswer(e) {
     const selectedBtn = e.target;
     const isCorrect = selectedBtn.dataset.correct === "true";
@@ -277,15 +306,17 @@ function selectTheAnswer(e) {
 }
 
 
-
+//user name and score
 function showScore() {
     resetState();
-    questionElement.innerHTML = `${userName} You Scored ${score} out of ${questions.length}!`;
+    console.log("name", alertNameInput)
+    questionElement.innerHTML = `${alertNameInput} You Scored ${score} out of ${questions.length}!`;
     nextButton.innerHTML = "Play Again";
     nextButton.style.display = "block";
 }
 
 
+//next button function
 function handleNextButton() {
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
