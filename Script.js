@@ -242,19 +242,19 @@ let score = 0;
 //     return prompt("What is your Name?");
 // }
 
+
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     nextButton.innerHTML = "Next";
 
-    const prevButton = document.getElementById("prev-btn");
-    prevButton.addEventListener("click", goBack);
     showQuestion();
+
+    const prevBtn = document.getElementById("prev-btn");
+    prevBtn.addEventListener('click', showPrevQuestion);
+    prevBtn.disabled = true;
 }
 
-function goBack() {
-    window.history.back();
-}
 
 
 //show question and answers button
@@ -285,11 +285,19 @@ function resetState() {
     }
 }
 
+const userAnswers = []
 
-//answre selection
+//answer selection
 function selectTheAnswer(e) {
     const selectedBtn = e.target;
     const isCorrect = selectedBtn.dataset.correct === "true";
+
+    userAnswers[currentQuestionIndex] = {
+        answerIndex: Array.from(answerButtons.children).indexOf(selectedBtn),
+        isCorrect: isCorrect
+    };
+
+
     if (isCorrect) {
         selectedBtn.classList.add("correct");
         score++;
@@ -303,6 +311,8 @@ function selectTheAnswer(e) {
         button.disabled = true;
     });
     nextButton.style.display = "block";
+
+
 }
 
 
@@ -310,7 +320,7 @@ function selectTheAnswer(e) {
 function showScore() {
     resetState();
     console.log("name", alertNameInput)
-    questionElement.innerHTML = `${alertNameInput} You Scored ${score} out of ${questions.length}!`;
+    questionElement.innerHTML = `${alertNameInput}😍 You Scored ${score} out of ${questions.length}!`;
     nextButton.innerHTML = "Play Again";
     nextButton.style.display = "block";
 }
@@ -323,6 +333,24 @@ function handleNextButton() {
         showQuestion();
     } else {
         showScore();
+    }
+
+    const prevBtn = document.getElementById("prev-btn");
+    prevBtn.disabled = false; 
+}
+
+//Show previous question function
+function showPrevQuestion(){
+    currentQuestionIndex--;
+
+    if(currentQuestionIndex >= 0){
+        showQuestion();
+        if (userAnswers[currentQuestionIndex] !== undefined){
+            const selectedAnswerIndex = userAnswers[currentQuestionIndex].answerIndex;
+            answerButtons.children[selectedAnswerIndex.classList.add(
+                userAnswers[currentQuestionIndex].isCorrect ? "correct" : "incorrect"
+            )]
+        }
     }
 }
 
