@@ -312,6 +312,9 @@ function selectTheAnswer(e) {
     });
     nextButton.style.display = "block";
 
+    const prevButton = document.getElementById("prev-btn");
+    prevButton.style.display = "inline-block";
+
 
 }
 
@@ -336,22 +339,32 @@ function handleNextButton() {
     }
 
     const prevBtn = document.getElementById("prev-btn");
-    prevBtn.disabled = false; 
+    prevBtn.disabled = false;
+    const prevButton = document.getElementById("prev-btn");
+    prevBtn.style.display = "none";
 }
 
 //Show previous question function
-function showPrevQuestion(){
+function showPrevQuestion() {
     currentQuestionIndex--;
-
-    if(currentQuestionIndex >= 0){
+ 
+    if (currentQuestionIndex >= 0) {
         showQuestion();
-        if (userAnswers[currentQuestionIndex] !== undefined){
+        if (userAnswers[currentQuestionIndex] !== undefined) {
             const selectedAnswerIndex = userAnswers[currentQuestionIndex].answerIndex;
             answerButtons.children[selectedAnswerIndex.classList.add(
                 userAnswers[currentQuestionIndex].isCorrect ? "correct" : "incorrect"
             )]
         }
     }
+
+    const prevButton = document.getElementById("prev-btn");
+    if (currentQuestionIndex === 0) {
+        prevButton.style.display = "none";
+    } else {
+        prevButton.style.display = "inline-block";
+    }
+
 }
 
 nextButton.addEventListener('click', () => {
